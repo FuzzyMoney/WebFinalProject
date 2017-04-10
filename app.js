@@ -4,9 +4,6 @@ import express from 'express';
 // Bring in configuration from the config.js file
 import config from './config';
 
-// Load backend api data router
-import apiRouter from './api';
-
 // Create a new express server
 const server = express();
 
@@ -23,9 +20,6 @@ server.use((req, res, next) => {
 server.get('/', (req, res) => {
   res.render('index');
 });
-
-// Pass of /api to the apiRouter
-server.use('/api', apiRouter);
 
 // Serve all other files in the public folder statically
 server.use(express.static('public'));

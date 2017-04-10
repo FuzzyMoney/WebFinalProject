@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './src/ReactApp.jsx',
+  entry: './app/ReactApp.jsx',
   output: {
     path: __dirname + '/public',
     filename: 'reactBundle.js'
