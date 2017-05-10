@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import HelloComponent from './components/HelloComponent.jsx';
+import BasicChat from './components/BasicChat.jsx';
 
 const element = (
   <div>
-    <HelloComponent asPageHeader message="Hello from ReactApp.jsx" />
-    <HelloComponent message="This is the second header" />
+    <HelloComponent asPageHeader message="Socket.IO Chat App" />
+      <BasicChat />
   </div>
 );
 
