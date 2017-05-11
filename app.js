@@ -32,6 +32,7 @@ app.get('/', (req, res) => {
 io.on('connection', function(socket) {
   console.info('a user connected');
   socket.name = 'Anonymous Aardvark';
+  socket.emit('name list', nameList);
 
   socket.on('send user', function(name) {
     var nameFound = nameList.find((curName) => {
@@ -41,11 +42,14 @@ io.on('connection', function(socket) {
     if(nameFound) {
       socket.emit('bad name', name);
     } else {
-      let oldName = name;
-      let which = nameList.indexOf(oldName);
-      nameList.splice(which, 1);
+      let which = nameList.indexOf(socket.name);
+      if(which != -1) {
+        nameList.splice(which, 1);
+      }
       socket.name = name;
       nameList.push(name);
+
+      io.emit('name list', nameList);
     }
   });
 
@@ -63,6 +67,7 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('chat message', `[${socket.name} left the chat]`);
     let which = nameList.indexOf(socket.name);
     nameList.splice(which, 1);
+    io.emit('name list', nameList);
   });
 });
 

@@ -41,6 +41,13 @@ class BasicChat extends React.Component {
       window.alert(`"${name}" is already in use`);
     });
 
+    this.socket.on('name list', (newNames) => {
+      this.setState({
+        names: newNames,
+        isTyping: new Array(newNames.size).fill(0)
+      });
+    });
+
     this.socket.on('chat message', (msg) => {
       let newMessages = this.state.messages;
       newMessages.push(msg);
@@ -51,7 +58,7 @@ class BasicChat extends React.Component {
 
     this.socket.on('typing',  (name) => {
       // Show they are typing
-      var which = this.sate.names.indexOf(name);
+      var which = this.state.names.indexOf(name);
       var isTyping = this.state.typing;
       isTyping[which]++;
       this.setState({
@@ -62,6 +69,7 @@ class BasicChat extends React.Component {
       setTimeout(() => {
         var isTyping = this.state.typing;
         isTyping[which]--;
+        isTyping[which] = Math.max(0, isTyping[which]);
         this.setState({
           typing: isTyping
         });
@@ -102,7 +110,12 @@ class BasicChat extends React.Component {
         <tr key={i}><td>{message}</td></tr>
       );
     });
-
+    let nameItems = [];
+    this.state.names.forEach((name, i) => {
+      nameItems.push(
+        <tr key={i}><td>{name}</td></tr>
+      );
+    });
     let mDiv = {
       'border': '1px solid #EEEEEE',
       'borderRadius': '5px',
@@ -125,9 +138,7 @@ class BasicChat extends React.Component {
           <div id="tableDiv" style={mDiv} className="col-xs-4">
             <table className="table table-striped table-bordered">
               <tbody>
-                <tr><td>Joe</td></tr>
-                <tr><td>Sally</td></tr>
-                <tr><td>Miguel</td></tr>
+                {nameItems}
               </tbody>
             </table>
           </div>
