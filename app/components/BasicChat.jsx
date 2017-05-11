@@ -80,7 +80,8 @@ class BasicChat extends React.Component {
 
 
   componentDidUpdate() {
-    //TODO Set Scroll
+    $('#tableDiv')[0].scrollTop =
+      $('#tableDiv')[0].scrollHeight;
   }
 
   componentWillUmount() {
@@ -92,18 +93,40 @@ class BasicChat extends React.Component {
     let messageItems = [];
     this.state.messages.forEach((message, i) => {
       messageItems.push(
-      <li className="list-group-item" key={i}>{message}</li>
+        <tr key={i}><td>{message}</td></tr>
       );
     });
+
+    let mDiv = {
+      'border': '1px solid #EEEEEE',
+      'borderRadius': '5px',
+      'width': '100%',
+      'height': '400px',
+      'display': 'block',
+      'overflow': 'auto'
+    };
+
     return (
       <div>
-        <ul className="list-group">{messageItems}</ul>
+        <div id="tableDiv" style={mDiv}>
+          <table className="table table-striped table-bordered">
+            <tbody>
+              {messageItems}
+            </tbody>
+          </table>
+        </div>
 
-        <input id="m" type="text" className="form-control" placeholder="Type Message" />
-        <button id="messageSend" onClick={() => {this.sendMessage();}} className="btn btn-primary">Send</button>
+        <hr />
 
-        <input id="user" type="text" className="form-control" placeholder="Type Name" />
-        <button id="nameSend" onClick={() => {this.sendName();}} className="btn btn-primary">ChangeName</button>
+        <div className="form-inline form-group">
+          <input id="m" type="text" className="form-control" placeholder="Type Message" style={{width: '80%'}}/>
+          <button id="messageSend" onClick={() => {this.sendMessage();}} className="btn btn-primary pull-right" style={{width: '17%'}}>Send</button>
+        </div>
+
+        <div className="form-inline form-group">
+          <input id="user" type="text" className="form-control" placeholder="Type Name" style={{width: '80%'}}/>
+          <button id="nameSend" onClick={() => {this.sendName();}} className="btn btn-primary pull-right" style={{width: '17%'}}>Change Name</button>
+        </div>
       </div>
     );
   }
