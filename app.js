@@ -41,6 +41,9 @@ io.on('connection', function(socket) {
     if(nameFound) {
       socket.emit('bad name', name);
     } else {
+      let oldName = name;
+      let which = nameList.indexOf(oldName);
+      nameList.splice(which, 1);
       socket.name = name;
       nameList.push(name);
     }
