@@ -6,7 +6,9 @@ class BasicChat extends React.Component {
     super(props);
 
     this.state = {
-      messages: []
+      messages: [],
+      names: [],
+      isTyping: []
     };
   }
 
@@ -20,6 +22,10 @@ class BasicChat extends React.Component {
     console.info('Sending Message: ' +  $('#m').val());
     this.socket.emit('chat message', $('#m').val());
     $('#m').val('');
+  }
+
+  sendTyping() {
+    this.socket.emit('tying message', $('#user').val() + 'is typing...');
   }
 
   componentWillMount() {
@@ -36,10 +42,28 @@ class BasicChat extends React.Component {
         messages: newMessages
       });
     });
+
+    this.socket.on('typing',  (name) => {
+      // Show they are typing
+      var which = this.sate.names.indexOf(name);
+      var isTyping = this.state.typing;
+      isTyping[which]++;
+      this.setState({
+        typing: isTyping
+      });
+
+      // Stop showing later
+      setTimeout(() => {
+        var isTyping = this.state.typing;
+        isTyping[which]--;
+        this.setState({
+          typing: isTyping
+        });
+      }, 500);
+    });
   }
 
   componentDidMount() {
-    //TODO Set enter key
     $('#m').keyup((event) => {
       if(event.keyCode == 13) { $('#messageSend').click(); }
     });
@@ -47,7 +71,13 @@ class BasicChat extends React.Component {
     $('#user').keyup((event) => {
       if(event.keyCode == 13) { $('#nameSend').click(); }
     });
+
+    //if keydown then display isTyping..., don't if keyup
+    $('#m').on('change paste keyup', () => {
+      this.socket.emit('typing', 'isTyping...');
+    });
   }
+
 
   componentDidUpdate() {
     //TODO Set Scroll

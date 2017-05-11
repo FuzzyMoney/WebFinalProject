@@ -54,6 +54,10 @@ io.on('connection', function(socket) {
     io.emit('chat message', `${socket.name}: ${msg}`);
   });
 
+  socket.on('typing', () => {
+    socket.broadcast.emit('typing', socket.name);
+  });
+
   socket.on('disconnect', function() {
     console.info(`${socket.name} disconnected`);
     socket.broadcast.emit('chat message', `[${socket.name} left the chat]`);
