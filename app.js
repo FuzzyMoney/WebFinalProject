@@ -12,6 +12,8 @@ const app = express();
 let server = http.Server(app);
 let io = socket_io(server);
 
+let nameList = [];
+
 // Use EJS as our view engine (defaults to 'views' folder)
 app.set('view engine', 'ejs');
 
@@ -29,21 +31,31 @@ app.get('/', (req, res) => {
 //Respond to socket connection
 io.on('connection', function(socket) {
   console.info('a user connected');
+  socket.name = 'Anonamous Aardvark';
 
   socket.on('send user', function(name) {
-    socket.name = name;
-    socket.push(socket.name);
-    io.emit('send user', name);
-    //console.info(users);
+    var nameFound = nameList.find((curName) => {
+      return (curName == name);
+    });
+
+    if(nameFound) {
+      socket.emit('bad name', name);
+    } else {
+      socket.name = name;
+      nameList.push(name);
+    }
   });
 
   socket.on('chat message', function(msg) {
     console.info('message: '+ msg);
-    io.emit('chat message', msg);
+    io.emit('chat message', `${socket.name}: ${msg}`);
   });
 
   socket.on('disconnect', function() {
-    console.info('a user disconnected');
+    console.info(`${socket.name} disconnected`);
+    socket.broadcast.emit('chat message', `[${socket.name} left the chat]`);
+    let which = nameList.indexOf(socket.name);
+    nameList.splice(which, 1);
   });
 });
 

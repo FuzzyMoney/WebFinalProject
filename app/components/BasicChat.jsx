@@ -6,29 +6,27 @@ class BasicChat extends React.Component {
     super(props);
 
     this.state = {
-      messages: [],
-      people: []
+      messages: []
     };
   }
 
   sendName() {
     console.info('Name: ' +  $('#user').val());
-    //this.socket.emit('send user', $('#user').val());
+    this.socket.emit('send user', $('#user').val());
+    $('#user').val('');
   }
+
   sendMessage() {
     console.info('Sending Message: ' +  $('#m').val());
-    this.socket.emit('chat message', $('#user').val() + ': ' + $('#m').val());
+    this.socket.emit('chat message', $('#m').val());
+    $('#m').val('');
   }
 
   componentWillMount() {
     this.socket = io();
 
-    this.socket.on('send user', (name) => {
-      let allNames = this.state.messages;
-      allNames.push(name);
-      this.setState({
-        names: allNames
-      });
+    this.socket.on('bad name', (name) => {
+      window.alert(`"${name}" is already in use`);
     });
 
     this.socket.on('chat message', (msg) => {
@@ -38,6 +36,21 @@ class BasicChat extends React.Component {
         messages: newMessages
       });
     });
+  }
+
+  componentDidMount() {
+    //TODO Set enter key
+    $('#m').keyup((event) => {
+      if(event.keyCode == 13) { $('#messageSend').click(); }
+    });
+
+    $('#user').keyup((event) => {
+      if(event.keyCode == 13) { $('#nameSend').click(); }
+    });
+  }
+
+  componentDidUpdate() {
+    //TODO Set Scroll
   }
 
   componentWillUmount() {
@@ -55,10 +68,12 @@ class BasicChat extends React.Component {
     return (
       <div>
         <ul className="list-group">{messageItems}</ul>
+
         <input id="m" type="text" className="form-control" placeholder="Type Message" />
-        <button onClick={() => {this.sendMessage();}} className="btn btn-primary">Send</button>
-          <input id="user" type="text" className="form-control" placeholder="Type Name" />
-          <button onClick={() => {this.sendName();}} className="btn btn-primary">ChangeName</button>
+        <button id="messageSend" onClick={() => {this.sendMessage();}} className="btn btn-primary">Send</button>
+
+        <input id="user" type="text" className="form-control" placeholder="Type Name" />
+        <button id="nameSend" onClick={() => {this.sendName();}} className="btn btn-primary">ChangeName</button>
       </div>
     );
   }
