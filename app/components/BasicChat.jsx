@@ -13,14 +13,20 @@ class BasicChat extends React.Component {
   }
 
   sendName() {
-    console.info('Name: ' +  $('#user').val());
-    this.socket.emit('send user', $('#user').val());
+    //console.info('Name: ' +  $('#user').val());
+    if($('#user').val() != '')
+    {
+      this.socket.emit('send user', $('#user').val());
+    }
     $('#user').val('');
   }
 
   sendMessage() {
-    console.info('Sending Message: ' +  $('#m').val());
-    this.socket.emit('chat message', $('#m').val());
+    //console.info('Sending Message: ' +  $('#m').val());
+    if($('#m').val() != '')
+    {
+      this.socket.emit('chat message', $('#m').val());
+    }
     $('#m').val('');
   }
 
