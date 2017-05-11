@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 //Respond to socket connection
 io.on('connection', function(socket) {
   console.info('a user connected');
-  socket.name = 'Anonamous Aardvark';
+  socket.name = 'Anonymous Aardvark';
 
   socket.on('send user', function(name) {
     var nameFound = nameList.find((curName) => {
