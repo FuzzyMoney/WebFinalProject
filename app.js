@@ -30,8 +30,15 @@ app.get('/', (req, res) => {
 io.on('connection', function(socket) {
   console.info('a user connected');
 
+  socket.on('send user', function(name) {
+    socket.name = name;
+    socket.push(socket.name);
+    io.emit('send user', name);
+    //console.info(users);
+  });
+
   socket.on('chat message', function(msg) {
-    console.info('message: ' + msg);
+    console.info('message: '+ msg);
     io.emit('chat message', msg);
   });
 

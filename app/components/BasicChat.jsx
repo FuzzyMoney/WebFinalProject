@@ -6,17 +6,30 @@ class BasicChat extends React.Component {
     super(props);
 
     this.state = {
-      messages: []
+      messages: [],
+      people: []
     };
   }
 
+  sendName() {
+    console.info('Name: ' +  $('#user').val());
+    //this.socket.emit('send user', $('#user').val());
+  }
   sendMessage() {
     console.info('Sending Message: ' +  $('#m').val());
-    this.socket.emit('chat message', $('#m').val());
+    this.socket.emit('chat message', $('#user').val() + ': ' + $('#m').val());
   }
 
   componentWillMount() {
     this.socket = io();
+
+    this.socket.on('send user', (name) => {
+      let allNames = this.state.messages;
+      allNames.push(name);
+      this.setState({
+        names: allNames
+      });
+    });
 
     this.socket.on('chat message', (msg) => {
       let newMessages = this.state.messages;
@@ -25,8 +38,6 @@ class BasicChat extends React.Component {
         messages: newMessages
       });
     });
-
-    this.socket.on('history')
   }
 
   componentWillUmount() {
@@ -46,6 +57,8 @@ class BasicChat extends React.Component {
         <ul>{messageItems}</ul>
         <input id="m" type="text" className="form-control" placeholder="Type Message" />
         <button onClick={() => {this.sendMessage();}} className="btn btn-primary">Send</button>
+          <input id="user" type="text" className="form-control" placeholder="Type Name" />
+          <button onClick={() => {this.sendName();}} className="btn btn-primary">ChangeName</button>
       </div>
     );
   }
