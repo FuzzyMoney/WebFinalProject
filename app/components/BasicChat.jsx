@@ -106,7 +106,6 @@ class BasicChat extends React.Component {
     let mDiv = {
       'border': '1px solid #EEEEEE',
       'borderRadius': '5px',
-      'width': '100%',
       'height': '400px',
       'display': 'block',
       'overflow': 'auto'
@@ -114,12 +113,24 @@ class BasicChat extends React.Component {
 
     return (
       <div>
-        <div id="tableDiv" style={mDiv}>
-          <table className="table table-striped table-bordered">
-            <tbody>
-              {messageItems}
-            </tbody>
-          </table>
+        <div className="row">
+          <div id="tableDiv" style={mDiv} className="col-xs-8">
+            <table className="table table-striped table-bordered">
+              <tbody>
+                {messageItems}
+              </tbody>
+            </table>
+          </div>
+
+          <div id="tableDiv" style={mDiv} className="col-xs-4">
+            <table className="table table-striped table-bordered">
+              <tbody>
+                <tr><td>Joe</td></tr>
+                <tr><td>Sally</td></tr>
+                <tr><td>Miguel</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <hr />
