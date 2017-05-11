@@ -49,12 +49,12 @@ class BasicChat extends React.Component {
     let messageItems = [];
     this.state.messages.forEach((message, i) => {
       messageItems.push(
-      <li key={i}>{message}</li>
+      <li className="list-group-item" key={i}>{message}</li>
       );
     });
     return (
       <div>
-        <ul>{messageItems}</ul>
+        <ul className="list-group">{messageItems}</ul>
         <input id="m" type="text" className="form-control" placeholder="Type Message" />
         <button onClick={() => {this.sendMessage();}} className="btn btn-primary">Send</button>
           <input id="user" type="text" className="form-control" placeholder="Type Name" />
