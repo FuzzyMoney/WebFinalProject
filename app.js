@@ -59,7 +59,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('typing', () => {
-    socket.broadcast.emit('typing', socket.name);
+    socket.broadcast.emit('typing', `${socket.name} is typing`);
   });
 
   socket.on('disconnect', function() {
