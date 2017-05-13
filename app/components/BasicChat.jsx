@@ -31,7 +31,7 @@ class BasicChat extends React.Component {
   }
 
   sendTyping() {
-    this.socket.emit('tying message', $('#user').val() + 'is typing...');
+    this.socket.emit('typing', $('#user').val());
   }
 
   componentWillMount() {
@@ -59,19 +59,19 @@ class BasicChat extends React.Component {
     this.socket.on('typing',  (name) => {
       // Show they are typing
       var which = this.state.names.indexOf(name);
-      var isTyping = this.state.typing;
-      isTyping[which]++;
+      var typing = this.state.isTyping;
+      typing[which]++;
       this.setState({
-        typing: isTyping
+        isTyping: typing
       });
 
       // Stop showing later
       setTimeout(() => {
-        var isTyping = this.state.typing;
-        isTyping[which]--;
-        isTyping[which] = Math.max(0, isTyping[which]);
+        var typing = this.state.isTyping;
+        typing[which]--;
+        typing[which] = Math.max(0, typing[which]);
         this.setState({
-          typing: isTyping
+          isTyping: typing
         });
       }, 500);
     });
